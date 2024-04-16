@@ -1,0 +1,22 @@
+#!/bin/bash
+
+echo "please enter save path"
+read -r SAVE_PATH
+
+echo "please enter Docker path"
+read -r DOCKER_PATH
+
+echo "please enter image name for new image"
+read -r IMAGE_NAME
+
+function docker_upload() {
+    if [ "$(command -vvv docker ps)" ]; then
+        echo "Docker is running"
+        cd "$SAVE_PATH"
+        /usr/local/bin/docker import "$DOCKER_PATH" "$IMAGE_NAME"
+    else 
+        echo "Docker is not running or not installed"
+    fi
+}
+
+docker_upload

@@ -1,0 +1,137 @@
+#!/bin/bash
+
+#URL="$5"
+#SAVE_PATH="$6"
+#FILE_PATH="$7"
+
+echo "please enter URL"
+read -r URL
+
+echo "please enter save path"
+read -r SAVE_PATH
+
+echo "please enter Docker path"
+read -r DOCKER_PATH
+
+echo "please enter image name for new image"
+read -r IMAGE_NAME
+
+function check_url_regex() {
+URL_CHECK_REGEX='(https?|ftp|file)://[-[:alnum:]\+&@#/%?=~_|!:,.;]*[-[:alnum:]\+&@#/%=~_|]'
+if [[ "$URL" =~ ${URL_CHECK_REGEX} ]]; then
+    echo "$URL is valid."
+else
+    echo "$URL is not valid."
+fi
+}
+
+
+function check_path_regex() {
+PATH_CHECK_REGEX='^(\/[^\/]*)+\/?$'
+if [[ "$SAVE_PATH" =~ ${PATH_CHECK_REGEX} ]]; then
+    echo "$SAVE_PATH is valid"
+    FOLDER=$(dirname "$SAVE_PATH")
+    if [[ -d "$FOLDER" ]]; then
+        echo "Folder $FOLDER exists"
+    else
+        echo "Folder $FOLDER doesn't exist, creating it"
+        mkdir -p -v "$FOLDER"
+        if [ -f "$FOLDER" ]; then
+            echo "created $FOLDER"
+        else
+            echo "failed to create $FOLDER"
+            exit 1
+          fi
+      fi
+  else
+      echo "$SAVE_PATH is an invalid path."
+      exit 1
+fi
+}
+
+check_url_regex
+check_path_regex
+
+function private_download() {
+    if [ "$(command -v wget)" ]; then
+        echo "$URL wget installed, downloading using wget"
+        wget $SAVE_PATH $URL | tar -xz
+    elif [ "$(command -v curl)" ]; then
+          echo "curl installed, download using curl"
+          cd "$SAVE_PATH" && curl -O "$URL" | tar -xz || exit 1
+    else
+        echo "Failed to find wget or curl"
+        exit 1
+    fi
+}
+
+function docker_upload() {
+    if [ "$(command docker ps)" ]; then
+        echo "Docker is running"
+        cd "$SAVE_PATH" || exit 1
+        /usr/local/bin/docker import "$DOCKER_PATH" "$IMAGE_NAME"
+    else 
+        echo "Docker is not running or not installed"
+        exit 1
+    fi
+}
+
+private_download
+docker_upload
+
+echo "please enter the repo location for Kubernetes"
+read -r K8_PATH
+
+echo "please enter file name for pod creation"
+read -r FILE_POD
+
+
+function Kubernetes_create() {
+    if [ "$(command kubectl version --output=yaml)" ]; then
+        echo "Kubernetes is installed"
+        cd "$K8_PATH" || exit 1
+       kubectl apply -f "$FILE_POD"
+    else
+        echo "Kubernetes not found"
+        exit 1
+    fi
+
+}
+
+Kubernetes_create
+
+echo "please provide the pod name to be patched"
+read -r POD_NAME
+
+echo "please provide patch file name"
+read -r FILE_NAME
+
+
+function Kubernetes_patch() {
+    if [ "$(command kubectl get pods $POD_NAME)" ]; then
+        echo "Pod found"
+        cd "$K8_PATH" || exit 1
+        kubectl patch pod "$POD_NAME" --patch-file "$FILE_NAME"
+    else
+        echo "Pod not found"
+        exit 1
+    fi
+}
+
+Kubernetes_patch
+
+
+function private_validate() {
+  if [ -f "$SAVE_PATH" ]; then
+      echo "File Downloaded."
+  else
+      echo "Failed to download"
+      exit 1
+  fi
+ }
+
+
+
+
+
+ 
