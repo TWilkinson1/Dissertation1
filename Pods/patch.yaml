@@ -1,4 +1,6 @@
 spec:
-    containers:
-      - name: container-1
-        image: my_image
+  template:
+    spec:
+      containers:
+        - name: nginx
+          image: my_image

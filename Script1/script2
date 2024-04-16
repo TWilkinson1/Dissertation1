@@ -69,8 +69,7 @@ function docker_upload() {
     if [ "$(command docker ps)" ]; then
         echo "Docker is running"
         cd "$SAVE_PATH" || exit 1
-        /usr/local/bin/docker import "$DOCKER_PATH" "$IMAGE_NAME"
-        /usr/local/bin/docker run "$IMAGE_NAME"
+        /usr/local/bin/docker import "$DOCKER_PATH" "$IMAGE_NAME" | /usr/local/bin/docker run "$IMAGE_NAME" || exit 1
     else 
         echo "Docker is not running or not installed"
         exit 1
@@ -101,7 +100,7 @@ function Kubernetes_create() {
 
 Kubernetes_create
 
-echo "please provide the deployment name to be patched"
+echo "please provide the deployment or pod name to be patched"
 read -r Deployment
 
 echo "please provide patch file name"
@@ -109,12 +108,14 @@ read -r FILE_NAME
 
 
 function Kubernetes_patch() {
-    if [ "$(command kubectl get pods $POD_NAME)" ]; then
+    if [ "$(command kubectl get pods)" ]; then
         echo "Pod found"
         cd "$K8_PATH" || exit 1
-        kubectl patch deployment "$Deployment" --patch-file "$FILE_NAME"
+        kubectl patch deployment "$Deployment" --patch-file "$FILE_NAME" || kubectl patch pod "$Deployment" --patch-file "$FILE_NAME"
     else
         echo "Pod not found"
+        kubectl delete pod "$Deployment" || kubectl delete deployment "$Deployment"
+        echo "Pod or deployment deleted"
         exit 1
     fi
 }
