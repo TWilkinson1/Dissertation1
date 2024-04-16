@@ -3,4 +3,4 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: my_image
+          image: 

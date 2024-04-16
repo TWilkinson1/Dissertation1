@@ -58,18 +58,20 @@ function private_download() {
         wget $SAVE_PATH $URL | tar -xz
     elif [ "$(command -v curl)" ]; then
           echo "curl installed, download using curl"
-          cd "$SAVE_PATH" && curl -O "$URL" | tar -xz || exit 1
+          cd "$SAVE_PATH" && curl -c "$URL" || exit 1
     else
         echo "Failed to find wget or curl"
         exit 1
     fi
 }
 
-function docker_upload() {
+function docker_create() {
     if [ "$(command docker ps)" ]; then
         echo "Docker is running"
         cd "$SAVE_PATH" || exit 1
-        /usr/local/bin/docker import "$DOCKER_PATH" "$IMAGE_NAME" | /usr/local/bin/docker build . -t "$IMAGE_NAME" | /usr/local/bin/docker run "$IMAGE_NAME" || exit 1
+        #/usr/local/bin/docker import "$DOCKER_PATH" "$IMAGE_NAME" | 
+        /usr/local/bin/docker build . -t "$DOCKER_PATH"
+         #| /usr/local/bin/docker run "$IMAGE_NAME" || exit 1
     else 
         echo "Docker is not running or not installed"
         exit 1
@@ -77,7 +79,7 @@ function docker_upload() {
 }
 
 private_download
-docker_upload
+docker_create
 
 echo "please enter the repo location for Kubernetes"
 read -r K8_PATH
@@ -103,15 +105,13 @@ Kubernetes_create
 echo "please provide the deployment or pod name to be patched"
 read -r Deployment
 
-echo "please provide patch file name"
-read -r FILE_NAME
-
 
 function Kubernetes_patch() {
     if [ "$(command kubectl get pods)" ]; then
         echo "Pod found"
         cd "$K8_PATH" || exit 1
-        kubectl patch deployment "$Deployment" --patch-file "$FILE_NAME" || kubectl patch pod "$Deployment" --patch-file "$FILE_NAME"
+        #kubectl patch deployment "$Deployment" --patch-file "$FILE_NAME" || kubectl patch pod "$Deployment" --patch-file "$FILE_NAME"
+        kubectl patch deployment "$Deployment" --type='json' -p='[{"op": "replace", "path": "/spec/containers/name/image", "value":"$IMAGE_NAME"}]' || kubectl patch deployment "$Deployment" --type='json' -p='[{"op": "replace", "path": "/spec/containers/name/image", "value":"$IMAGE_NAME"}]'
     else
         echo "Pod not found"
         kubectl delete pod "$Deployment" || kubectl delete deployment "$Deployment"
