@@ -58,7 +58,7 @@ function private_download() {
         wget $SAVE_PATH $URL | tar -xz
     elif [ "$(command -v curl)" ]; then
           echo "curl installed, download using curl"
-          cd "$SAVE_PATH" && curl -c "$URL" || exit 1
+          cd "$SAVE_PATH" && curl -O "$URL" || exit 1
     else
         echo "Failed to find wget or curl"
         exit 1
