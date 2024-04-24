@@ -1,8 +1,8 @@
 #!/bin/bash
 
-URL="https://github.com/nginxinc/docker-nginx/archive/refs/heads/master.zip"
-SAVE_PATH="/users/thomas.wilkinson/desktop/dissertation"
-DOCKER_PATH="/users/thomas.wilkinson/desktop/dissertation/master"
+URL="https://github.com/TWilkinson1/Docker_Diss/archive/refs/heads/main.zip"
+SAVE_PATH="/users/Thomas.Wilkinson/desktop/test_code"
+DOCKER_PATH="/users/Thomas.Wilkinson/desktop/test_code/main"
 IMAGE_NAME="my_image"
 
 #echo "please enter URL"
@@ -56,7 +56,8 @@ check_path_regex
 function private_download() {
     if [ "$(command -v wget)" ]; then
         echo "$URL wget installed, downloading using wget"
-        wget $SAVE_PATH $URL | tar -xz
+        cd "$SAVE_PATH" && wget "$SAVE_PATH" "$URL"
+        unzip "$DOCKER_PATH" || exit 1
     elif [ "$(command -v curl)" ]; then
           echo "curl installed, download using curl"
           cd "$SAVE_PATH" && curl -LO "$URL" || exit 1
@@ -72,15 +73,16 @@ private_download
 #echo "please enter file path to dockerfile"
 #read -r "DOCKER_FILE"
 
-DOCKER_FILE="/users/thomas.wilkinson/desktop/dissertation/docker-nginx-master/stable/debian"
+DOCKER_FILE="/users/thomas.wilkinson/desktop/test_code/Docker_Diss-main"
 
 function docker_create() {
     if [ "$(command docker ps)" ]; then
         echo "Docker is running"
-        cd "$SAVE_PATH" || exit 1
+        cd "$DOCKER_FILE" || exit 1
         #/usr/local/bin/docker import "$DOCKER_PATH" "$IMAGE_NAME" | 
         /usr/local/bin/docker build "$DOCKER_FILE" || exit 1
-         #| /usr/local/bin/docker run "$IMAGE_NAME" || exit 1
+        /usr/local/bin/docker build . -t "$IMAGE_NAME"
+         #| /usr/local/bin/docker run $IMAGE_NAME" || exit 1
     else 
         echo "Docker is not running or not installed"
         exit 1
@@ -89,18 +91,24 @@ function docker_create() {
 
 docker_create
 
-echo "please enter the repo location for Kubernetes"
-read -r K8_PATH
+#echo "please enter the repo location for Kubernetes"
+#read -r K8_PATH
 
-echo "please enter file name for pod or deployment creation"
-read -r FILE_POD
+#echo "please enter file name for pod or deployment creation"
+#read -r FILE_POD
+
+K8_PATH="/users/thomas.wilkinson/documents/dissertation/pods"
+FILE_POD="pod.yaml" 
+DEPLOYMENT_FILE="Deployment.yaml"
+POD_NAME="test-pod"
 
 
 function Kubernetes_create() {
     if [ "$(command kubectl version --output=yaml)" ]; then
         echo "Kubernetes is installed"
         cd "$K8_PATH" || exit 1
-       kubectl apply -f "$FILE_POD"
+        kubectl apply -f "$FILE_POD"
+        kubectl describe pod "$POD_NAME"
     else
         echo "Kubernetes pod or deployment not found"
         exit 1
@@ -110,19 +118,25 @@ function Kubernetes_create() {
 
 Kubernetes_create
 
-echo "please provide the deployment or pod name to be patched"
-read -r Deployment
+Deployment="nginx-deployment"
+IMAGE_NAME="my_image"
+
+#echo "please provide the deployment or pod name to be patched"
+#read -r Deployment
+
+#echo "please enter name of pat
 
 
 function Kubernetes_patch() {
     if [ "$(command kubectl get pods)" ]; then
         echo "Pod found"
         cd "$K8_PATH" || exit 1
-        #kubectl patch deployment "$Deployment" --patch-file "$FILE_NAME" || kubectl patch pod "$Deployment" --patch-file "$FILE_NAME"
-        kubectl patch deployment "$Deployment" --type='json' -p='[{"op": "replace", "path": "/spec/containers/name/image", "value":"$IMAGE_NAME"}]' || kubectl patch deployment "$Deployment" --type='json' -p='[{"op": "replace", "path": "/spec/containers/name/image", "value":"$IMAGE_NAME"}]'
+        #kubectl patch pod "$Deployment" --patch-file "$FILE_NAME" || kubectl patch pod "$Deployment" --patch-file "$FILE_NAME"
+        kubectl patch pod "$POD_NAME" --type='json' -p=' [{"op": "replace", "path": "/spec/containers/0/image", "value":"my_image"}]' #kubectl patch deployment "$Deployment" --subresource='image' --type='merge' -p '{"spec/containers/":{"image":my_image}}'
+        kubectl describe pod "$POD_NAME"
     else
         echo "Pod not found"
-        kubectl delete pod "$Deployment" || kubectl delete deployment "$Deployment"
+        kubectl delete pod "$POD_NAME" || kubectl delete deployment "$Deployment"
         echo "Pod or deployment deleted"
         exit 1
     fi
