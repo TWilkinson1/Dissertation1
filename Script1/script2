@@ -124,7 +124,8 @@ IMAGE_NAME="my_image"
 #echo "please provide the deployment or pod name to be patched"
 #read -r Deployment
 
-#echo "please enter name of pat
+#echo "please enter name of patch file"
+#read -r Patch_file
 
 
 function Kubernetes_patch() {
