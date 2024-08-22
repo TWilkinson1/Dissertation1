@@ -5,6 +5,9 @@ SAVE_PATH="/users/Thomas.Wilkinson/desktop/test_code"
 DOCKER_PATH="/users/Thomas.Wilkinson/desktop/test_code/main"
 IMAGE_NAME="my_image"
 
+current_time=$(date +"%H:%M:%S")
+echo "Current time: $current_time"
+
 #echo "please enter URL"
 #read -r URL
 
@@ -151,6 +154,9 @@ function Kubernetes_patch() {
 }
 
 Kubernetes_patch
+
+current_time=$(date +"%H:%M:%S")
+echo "Current time: $current_time"
 
 
 
