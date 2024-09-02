@@ -1,0 +1,34 @@
+Hello! 
+
+Within this repository you will find two files:
+a file called 'pods' and a file called 'Script1'
+
+The 'pods' file should not be touched however there are some variables within the Script1 file that may need setting.
+
+The script will use user inputs to determine certain actions- where to save a file to etc- for ease of use I am providing below some defaults that can be copied into the relevant variables rather than typing by hand each time.
+
+URL="https://github.com/TWilkinson1/Docker_Diss/archive/refs/heads/main.zip"
+SAVE_PATH="/users/<user>/desktop/<file_name>" 
+DOCKER_PATH="/users/<user>/desktop/<file_name>/main"
+IMAGE_NAME="my_image"
+
+K8_PATH="/users/<user>/<path to 'pods' file>
+FILE_POD="pod.yaml" <or name of yml file containing pod>
+POD_NAME="test-pod" <or name of pod to be patched>
+
+The URL will download a docker file I have saved in my GitHub repo- this is likely the easiest one for you to use as other Dockerfiles require a significant amount of configuration changes.
+
+User above equates to your username- mine would be Thomas.Wilkinson
+File name equates to whatever you choose the file to be called- I use test_code
+
+please note- IMAGE_NAME must equal whatever value is set in 'value' on line 146 as this is a flaw in the Kubernetes patching- this variable cannot be dynamic. 
+
+To run this script pleasem cd to script1 and run 'bash script2'
+
+you must have kubectl, bash and docker installed for this to function.
+
+The user inputs will be enabled upon my submission, however these can be commented out and the variables at the top of the script hard-coded.
+
+The output of the script will be two 'kubectl describe pods' and two time stamps. Within this output we can see the change in image name- proving the script works.
+
+I will also enclose a recording of the script functioning to allow you to see it in action if you choose not to operate the script yourself.

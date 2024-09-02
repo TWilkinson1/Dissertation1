@@ -1,4 +1,4 @@
-#!/bin/bash
+https://github.com/TWilkinson1/Dissertation1.git#!/bin/bash
 
 URL="https://github.com/TWilkinson1/Docker_Diss/archive/refs/heads/main.zip"
 SAVE_PATH="/users/Thomas.Wilkinson/desktop/test_code"
@@ -109,7 +109,7 @@ docker_create
 #echo "please enter file name for pod or deployment creation"
 #read -r FILE_POD
 
-K8_PATH="/users/thomas.wilkinson/documents/dissertation/pods"
+K8_PATH="/users/thomas.wilkinson/documents/dissertation/dissertation1/pods"
 FILE_POD="pod.yaml" 
 DEPLOYMENT_FILE="Deployment.yaml"
 POD_NAME="test-pod"
