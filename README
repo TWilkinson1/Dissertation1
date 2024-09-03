@@ -16,7 +16,7 @@ K8_PATH="/users/<user>/<path to 'pods' file>
 FILE_POD="pod.yaml" <or name of yml file containing pod>
 POD_NAME="test-pod" <or name of pod to be patched>
 
-The URL will download a docker file I have saved in my GitHub repo- this is likely the easiest one for you to use as other Dockerfiles require a significant amount of configuration changes.
+The URL will download a docker file I have saved in my GitHub repo- this is likely the easiest one for you to use as other Dockerfiles require a significant amount of configuration changes. 
 
 User above equates to your username- mine would be Thomas.Wilkinson
 File name equates to whatever you choose the file to be called- I use test_code
