@@ -16,16 +16,20 @@ K8_PATH="/users/<user>/<path to 'pods' file>
 FILE_POD="pod.yaml" <or name of yml file containing pod>
 POD_NAME="test-pod" <or name of pod to be patched>
 
+IMAGE_NAME="my_image"
+
 The URL will download a docker file I have saved in my GitHub repo- this is likely the easiest one for you to use as other Dockerfiles require a significant amount of configuration changes. 
 
 User above equates to your username- mine would be Thomas.Wilkinson
-File name equates to whatever you choose the file to be called- I use test_code
+File name equates to whatever you choose the file to be called- I use test_code.
 
-please note- IMAGE_NAME must equal whatever value is set in 'value' on line 146 as this is a flaw in the Kubernetes patching- this variable cannot be dynamic. 
+please note- IMAGE_NAME must equal whatever value is set in 'value' on line 146 as this is a flaw in the Kubernetes patching- this variable cannot be dynamic. I reccommend leaving it as my_image.
+
+You must also ensure Docker is installed and the namespace is set to docker-desktop. The installation of Docker must be in the default /usr/local/bin/docker location. Or the docker create function will need to be updated.
 
 To run this script pleasem cd to script1 and run 'bash script2'
 
-you must have kubectl, bash and docker installed for this to function.
+you must have kubectl and bash installed for this to function.
 
 The user inputs will be enabled upon my submission, however these can be commented out and the variables at the top of the script hard-coded.
 
