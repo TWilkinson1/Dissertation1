@@ -86,7 +86,7 @@ function validate() {
 echo "please enter file path to dockerfile"
 read -r "DOCKER_FILE"
 
-DOCKER_FILE="/users/thomas.wilkinson/desktop/test_code/Docker_Diss-main"
+#DOCKER_FILE="/users/thomas.wilkinson/desktop/test_code/Docker_Diss-main"
 
 function docker_create() {
     if [ "$(command docker ps)" ]; then
@@ -107,6 +107,10 @@ read -r K8_PATH
 
 echo "please enter file name for pod or deployment creation"
 read -r FILE_POD
+
+echo "please enter pod name to be patched"
+read -r POD_NAME
+
 
 #K8_PATH="/users/thomas.wilkinson/documents/dissertation/dissertation1/pods"
 #FILE_POD="pod.yaml" 
@@ -130,12 +134,6 @@ function Kubernetes_create() {
 Kubernetes_create
 
 IMAGE_NAME="my_image"
-
-echo "please provide the pod name to be patched"
-read -r Deployment
-
-echo "please enter name of patch file"
-read -r Patch_file
 
 
 function Kubernetes_patch() {
