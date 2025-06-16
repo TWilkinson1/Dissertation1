@@ -4,7 +4,7 @@ setup() {
     echo "Setup: PWD=$(pwd)"
     source "${BATS_TEST_DIRNAME}/functions.sh" 2>/dev/null || true
     export TEST_DIR=$(mktemp -d)
-    export SAVE_PATH="${TEST_DIR}/save"
+    export SAVE_PATH="/users/Thomas.Wilkinson/desktop/test_code"
     export DOCKER_PATH="${TEST_DIR}/docker"
     export K8_PATH="${TEST_DIR}/k8"
     export DOCKER_FILE="${TEST_DIR}/dockerfile"
@@ -51,7 +51,7 @@ teardown() {
 }
 
 @test "Creates missing SAVE_PATH" {
-    SAVE_PATH="$TEST_DIR/new/path"
+    SAVE_PATH="/users/Thomas.Wilkinson/desktop/test_code"
     run check_path_regex
     [ "$status" -eq 0 ]
     [ -d "$SAVE_PATH" ]
