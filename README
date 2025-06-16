@@ -36,3 +36,18 @@ The user inputs will be enabled upon my submission, however these can be comment
 The output of the script will be two 'kubectl describe pods' and two time stamps. Within this output we can see the change in image name- proving the script works.
 
 I will also enclose a recording of the script functioning to allow you to see it in action if you choose not to operate the script yourself.
+
+Unit tests:
+
+These have been added using the BATS framework. They can be seen in /script1/testscript.bats. To utilise these ensure bats is installed:
+
+git clone https://github.com/bats-core/bats-core.git
+cd bats-core
+sudo ./install.sh /usr/local
+bats test_script.bats to run the tests
+
+Other files included- /test_helper/bats_assert and bats_support. These are bats libraries that imporve testing by enabling commands such as assert_output.
+
+To install:
+git clone https://github.com/bats-core/bats-support test_helper/bats-support
+git clone https://github.com/bats-core/bats-assert test_helper/bats-assert
