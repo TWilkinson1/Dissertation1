@@ -1,23 +1,23 @@
 https://github.com/TWilkinson1/Dissertation1.git#!/bin/bash
 
-#URL="https://github.com/TWilkinson1/Docker_Diss/archive/refs/heads/main.zip"
-#SAVE_PATH="/users/Thomas.Wilkinson/desktop/test_code"
-#DOCKER_PATH="/users/Thomas.Wilkinson/desktop/test_code/main"
-#IMAGE_NAME="my_image"
+URL="https://github.com/TWilkinson1/Docker_Diss/archive/refs/heads/main.zip"
+SAVE_PATH="/users/Thomas.Wilkinson/desktop/test_code"
+DOCKER_PATH="/users/Thomas.Wilkinson/desktop/test_code/main"
+IMAGE_NAME="my_image"
 
 current_time=$(date +"%H:%M:%S")
-echo "Current time: $current_time"
+#echo "Current time: $current_time"
 
-echo "please enter URL"
-read -r URL
+#echo "please enter URL"
+#read -r URL
 
-echo "please enter save path"
-read -r SAVE_PATH
+#echo "please enter save path"
+#read -r SAVE_PATH
 
-echo "please enter Docker path"
-read -r DOCKER_PATH
-echo "please enter image name for new image"
-read -r IMAGE_NAME
+#echo "please enter Docker path"
+#read -r DOCKER_PATH
+#echo "please enter image name for new image"
+#read -r IMAGE_NAME
 
 function check_url_regex() {
 URL_CHECK_REGEX='(https?|ftp|file)://[-[:alnum:]\+&@#/%?=~_|!:,.;]*[-[:alnum:]\+&@#/%=~_|]'
@@ -83,10 +83,10 @@ function validate() {
 
  validate
 
-echo "please enter file path to dockerfile"
-read -r "DOCKER_FILE"
+#echo "please enter file path to dockerfile"
+#read -r "DOCKER_FILE"
 
-#DOCKER_FILE="/users/thomas.wilkinson/desktop/test_code/Docker_Diss-main"
+DOCKER_FILE="/users/thomas.wilkinson/desktop/test_code/Docker_Diss-main"
 
 function docker_create() {
     if [ "$(command docker ps)" ]; then
@@ -102,20 +102,20 @@ function docker_create() {
 
 docker_create
 
-echo "please enter the repo location for Kubernetes"
-read -r K8_PATH
+#echo "please enter the repo location for Kubernetes"
+#read -r K8_PATH
 
-echo "please enter file name for pod or deployment creation"
-read -r FILE_POD
+#echo "please enter file name for pod or deployment creation"
+#read -r FILE_POD
 
-echo "please enter pod name to be patched"
-read -r POD_NAME
+#echo "please enter pod name to be patched"
+#read -r POD_NAME
 
 
-#K8_PATH="/users/thomas.wilkinson/documents/dissertation/dissertation1/pods"
-#FILE_POD="pod.yaml" 
-#DEPLOYMENT_FILE="Deployment.yaml"
-#POD_NAME="test-pod"
+K8_PATH="/users/thomas.wilkinson/documents/dissertation/dissertation1/pods"
+FILE_POD="pod.yaml" 
+DEPLOYMENT_FILE="Deployment.yaml"
+POD_NAME="test-pod"
 
 
 function Kubernetes_create() {
