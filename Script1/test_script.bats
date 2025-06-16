@@ -1,7 +1,5 @@
 #!/usr/bin/env bats
 
-# Simple BATS Tests for Docker-Kubernetes Script
-
 setup() {
     source "${BATS_TEST_DIRNAME}/functions.sh" 2>/dev/null || true
     export TEST_DIR=$(mktemp -d)
@@ -19,6 +17,7 @@ setup() {
 }
 
 teardown() {
+    cd "$BATS_TEST_DIRNAME" || cd /tmp ||
     rm -rf "$TEST_DIR"
 }
 
