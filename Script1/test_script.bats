@@ -67,6 +67,21 @@ teardown() {
     [ "$status" -eq 0 ]
 }
 
+@test "private_download works with curl" {
+    curl() { touch "$SAVE_PATH/test.zip"; return 0; }
+    unzip() { return 0; }
+    command() {
+        # Simulate wget missing, curl present
+        if [ "$2" = "wget" ]; then return 1; fi
+        if [ "$2" = "curl" ]; then return 0; fi
+        return 1
+    }
+    export -f curl unzip command
+
+    run private_download
+    [ "$status" -eq 0 ]
+}
+
 @test "validate passes if SAVE_PATH exists" {
     run validate
     [ "$status" -eq 0 ]
