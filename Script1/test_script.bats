@@ -1,6 +1,7 @@
 #!/usr/bin/env bats
 
 setup() {
+    echo "Setup: PWD=$(pwd)"
     source "${BATS_TEST_DIRNAME}/functions.sh" 2>/dev/null || true
     export TEST_DIR=$(mktemp -d)
     export SAVE_PATH="${TEST_DIR}/save"
